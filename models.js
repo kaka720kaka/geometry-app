@@ -17,62 +17,65 @@ const models = [
 // 1. 手拉手模型 (Hand-in-Hand)
 // ============================================================
 function drawHandInHand(ctx, w, h, p, frame) {
-  drawBackground(ctx, w, h);
-  const cx = w/2, cy = h/2 - 10;
+  const cx = w/2, cy = h/2;
 
-  // Two congruent isosceles triangles sharing vertex A
+  // Two isosceles triangles sharing vertex A
   const A = { x: cx - 80, y: cy + 30 };
-
-  // Triangle 1: ABC (fixed)
   const len = 110;
   const baseAng = -Math.PI/3;
+
   const B = { x: A.x + len * Math.cos(baseAng), y: A.y + len * Math.sin(baseAng) };
   const C = { x: A.x + len * Math.cos(baseAng + Math.PI/3), y: A.y + len * Math.sin(baseAng + Math.PI/3) };
 
-  // Triangle 2: ADE (rotated)
   const rotAng = -p.angle * Math.PI / 180;
   const D = { x: A.x + len * Math.cos(baseAng + rotAng), y: A.y + len * Math.sin(baseAng + rotAng) };
   const E = { x: A.x + len * Math.cos(baseAng + Math.PI/3 + rotAng), y: A.y + len * Math.sin(baseAng + Math.PI/3 + rotAng) };
 
-  // Draw triangles
-  drawPolygon(ctx, [A, B, C], hexToRGBA(C.secondary, 0.12), C.secondary, 2.5);
-  drawPolygon(ctx, [A, D, E], hexToRGBA(C.success, 0.12), C.success, 2.5);
+  // Triangle 1 - raw canvas
+  ctx.beginPath();
+  ctx.moveTo(A.x, A.y); ctx.lineTo(B.x, B.y); ctx.lineTo(C.x, C.y); ctx.closePath();
+  ctx.fillStyle = 'rgba(37,99,235,0.15)';
+  ctx.fill();
+  ctx.strokeStyle = '#2563eb'; ctx.lineWidth = 2.5; ctx.stroke();
 
-  // Marks for equal sides
-  drawEqualMark(ctx, A, B, 1, C.secondary);
-  drawEqualMark(ctx, A, C, 1, C.secondary);
-  drawEqualMark(ctx, A, D, 1, C.success);
-  drawEqualMark(ctx, A, E, 1, C.success);
+  // Triangle 2 - raw canvas
+  ctx.beginPath();
+  ctx.moveTo(A.x, A.y); ctx.lineTo(D.x, D.y); ctx.lineTo(E.x, E.y); ctx.closePath();
+  ctx.fillStyle = 'rgba(22,163,74,0.15)';
+  ctx.fill();
+  ctx.strokeStyle = '#16a34a'; ctx.lineWidth = 2.5; ctx.stroke();
 
-  // Connect B-D and C-E (these are equal!)
-  drawLine(ctx, B.x, B.y, D.x, D.y, C.danger, 2.5);
-  drawLine(ctx, C.x, C.y, E.x, E.y, C.danger, 2.5);
-  drawEqualMark(ctx, B, D, 2, C.danger);
-  drawEqualMark(ctx, C, E, 2, C.danger);
+  // BD and CE lines
+  ctx.beginPath(); ctx.moveTo(B.x, B.y); ctx.lineTo(D.x, D.y);
+  ctx.strokeStyle = '#dc2626'; ctx.lineWidth = 2.5; ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(C.x, C.y); ctx.lineTo(E.x, E.y);
+  ctx.strokeStyle = '#dc2626'; ctx.lineWidth = 2.5; ctx.stroke();
 
   // Points
-  drawPoint(ctx, A.x, A.y, 'A', C.dark);
-  drawPoint(ctx, B.x, B.y, 'B', C.secondary);
-  drawPoint(ctx, C.x, C.y, 'C', C.secondary);
-  drawPoint(ctx, D.x, D.y, 'D', C.success);
-  drawPoint(ctx, E.x, E.y, 'E', C.success);
+  [A,B,C,D,E].forEach((pt, i) => {
+    ctx.beginPath();
+    ctx.arc(pt.x, pt.y, 5, 0, Math.PI*2);
+    ctx.fillStyle = '#1f2937';
+    ctx.fill();
+  });
 
-  // Angle marks at A
-  drawAngle(ctx, A, B, C, C.secondary, 25, '', true);
-  drawAngle(ctx, A, D, E, C.success, 25, '', true);
-
-  // Rotation arc indicator
-  ctx.beginPath();
-  ctx.arc(A.x, A.y, 50, baseAng, baseAng + rotAng, rotAng < 0);
-  ctx.strokeStyle = C.accent;
-  ctx.lineWidth = 2;
-  ctx.setLineDash([4, 4]);
-  ctx.stroke();
-  ctx.setLineDash([]);
+  // Labels
+  ctx.fillStyle = '#1f2937';
+  ctx.font = 'bold 15px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('A', A.x, A.y - 14);
+  ctx.fillText('B', B.x, B.y - 14);
+  ctx.fillText('C', C.x, C.y - 14);
+  ctx.fillText('D', D.x, D.y - 14);
+  ctx.fillText('E', E.x, E.y - 14);
 
   // Theorem
-  drawLabel(ctx, cx, h - 28, '△ABC ≅ △ADE (SAS) → BD = CE', C.dark, 14, true);
-  drawLabel(ctx, cx, h - 55, '手拉手：两等腰三角形共顶点旋转，拉手线相等', C.gray, 12);
+  ctx.fillStyle = '#1f2937';
+  ctx.font = 'bold 14px sans-serif';
+  ctx.fillText('△ABC ≅ △ADE (SAS) → BD = CE', cx, h - 28);
+  ctx.fillStyle = '#6b7280';
+  ctx.font = '12px sans-serif';
+  ctx.fillText('手拉手：两等腰三角形共顶点旋转，拉手线相等', cx, h - 52);
 }
 
 // ============================================================
