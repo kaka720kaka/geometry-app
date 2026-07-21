@@ -183,9 +183,14 @@ function updateAnimation() {
 }
 
 function draw() {
-  // Clear
-  ctx.fillStyle = '#fafbfc';
+  // Clear with visible white
+  ctx.fillStyle = '#ffffff';
   ctx.fillRect(0, 0, W, H);
+
+  // DEBUG: visible border to confirm canvas renders
+  ctx.strokeStyle = '#4f46e5';
+  ctx.lineWidth = 4;
+  ctx.strokeRect(2, 2, W-4, H-4);
 
   // Error state
   if (errorMsg) {
@@ -205,8 +210,8 @@ function draw() {
     return;
   }
 
-  // Draw grid
-  ctx.strokeStyle = '#e8eaed';
+  // Draw subtle grid
+  ctx.strokeStyle = '#f0f0f0';
   ctx.lineWidth = 0.5;
   for (let x = 30; x < W; x += 30) {
     ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke();
@@ -222,6 +227,17 @@ function draw() {
     errorMsg = '绘制错误：' + e.message;
     console.error(e);
   }
+
+  // DEBUG: visible purple border on top of everything
+  ctx.strokeStyle = '#7c3aed';
+  ctx.lineWidth = 3;
+  ctx.strokeRect(3, 3, W-6, H-6);
+
+  // DEBUG: model name
+  ctx.fillStyle = '#7c3aed';
+  ctx.font = 'bold 11px sans-serif';
+  ctx.textAlign = 'right';
+  ctx.fillText('模型: ' + currentModel.name, W-12, H-12);
 }
 
 // ===== Keyboard =====
