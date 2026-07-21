@@ -37,7 +37,7 @@ function drawHandInHand(ctx, w, h, p, frame) {
   const E={x:A.x+len*Math.cos(ba+Math.PI/3+ra), y:A.y+len*Math.sin(ba+Math.PI/3+ra)};
 
   // Triangles
-  function tri(a,b,c,fc,sc,lw){
+  const tri = function(a,b,c,fc,sc,lw){
     ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.lineTo(c.x,c.y); ctx.closePath();
     ctx.fillStyle=fc; ctx.fill(); ctx.strokeStyle=sc; ctx.lineWidth=lw; ctx.stroke();
   }
@@ -45,7 +45,7 @@ function drawHandInHand(ctx, w, h, p, frame) {
   tri(A,D,E, clr(CLR.grn,0.12), CLR.grn, 2.5);
 
   // BD and CE
-  function seg(a,b,c,lw,d){
+  const seg = function(a,b,c,lw,d){
     ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y);
     ctx.strokeStyle=c; ctx.lineWidth=lw; if(d)ctx.setLineDash(d); ctx.stroke(); ctx.setLineDash([]);
   }
@@ -53,7 +53,7 @@ function drawHandInHand(ctx, w, h, p, frame) {
   seg(C,E,CLR.red,2.5);
 
   // Equal marks on BD, CE
-  function mark(a,b,c){
+  const mark = function(a,b,c){
     const an=Math.atan2(b.y-a.y,b.x-a.x)+Math.PI/2;
     const mx=(a.x+b.x)/2, my=(a.y+b.y)/2, L=10;
     for(let i=0;i<2;i++){
@@ -104,14 +104,14 @@ function drawKModel(ctx, w, h, p, frame) {
   ctx.strokeStyle=CLR.lgr; ctx.lineWidth=1.5; ctx.stroke();
 
   // Rays
-  function ray(a,b,c,lw){
+  const ray = function(a,b,c,lw){
     ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y);
     ctx.strokeStyle=c; ctx.lineWidth=lw; ctx.stroke();
   }
   ray(B,A,CLR.pri,2); ray(C,E,CLR.pri,2); ray(D,F,CLR.pri,2);
 
   // Angle arcs
-  function ang(v,p1,p2,c,r,lb){
+  const angArc = function(v,p1,p2,c,r,lb){
     const a1=Math.atan2(p1.y-v.y,p1.x-v.x), a2=Math.atan2(p2.y-v.y,p2.x-v.x);
     ctx.beginPath(); ctx.arc(v.x,v.y,r,a1,a2,false);
     ctx.strokeStyle=c; ctx.lineWidth=2; ctx.stroke();
@@ -119,12 +119,12 @@ function drawKModel(ctx, w, h, p, frame) {
     ctx.fillStyle=c; ctx.font='bold 14px sans-serif'; ctx.textAlign='center';
     ctx.fillText(lb, v.x+(r+16)*Math.cos(ma), v.y+(r+16)*Math.sin(ma));
   }
-  ang(B,A,{x:C.x,y:B.y},CLR.acc,30,'α');
-  ang(C,{x:B.x,y:C.y},E,CLR.acc,30,'α');
-  ang(D,{x:C.x,y:D.y},F,CLR.acc,30,'α');
+  angArc(B,A,{x:C.x,y:B.y},CLR.acc,30,'α');
+  angArc(C,{x:B.x,y:C.y},E,CLR.acc,30,'α');
+  angArc(D,{x:C.x,y:D.y},F,CLR.acc,30,'α');
 
   // Dashed
-  function dash(a,b){
+  const dash = function(a,b){
     ctx.beginPath(); ctx.setLineDash([6,4]); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y);
     ctx.strokeStyle=CLR.gry; ctx.lineWidth=1.5; ctx.stroke(); ctx.setLineDash([]);
   }
@@ -168,14 +168,14 @@ function drawDoubleMedian(ctx, w, h, p, frame) {
   ctx.setLineDash([]);
 
   // Dashed BE and CE
-  function dd(a,b){
+  const dd = function(a,b){
     ctx.beginPath(); ctx.setLineDash([6,4]); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y);
     ctx.strokeStyle=CLR.gry; ctx.lineWidth=1.5; ctx.stroke(); ctx.setLineDash([]);
   }
   dd(B,E); dd(C,E);
 
   // Equal marks
-  function em(a,b,c,n){
+  const em = function(a,b,c,n){
     const an=Math.atan2(b.y-a.y,b.x-a.x)+Math.PI/2, mx=(a.x+b.x)/2, my=(a.y+b.y)/2;
     for(let i=0;i<n;i++){
       const o=6*(i-(n-1)/2), x=mx+o*Math.cos(an+Math.PI/2), y=my+o*Math.sin(an+Math.PI/2);
@@ -220,21 +220,21 @@ function drawBisector(ctx, w, h, p, frame) {
   ctx.strokeStyle=CLR.acc; ctx.lineWidth=3; ctx.setLineDash([8,4]); ctx.stroke(); ctx.setLineDash([]);
 
   // Perpendicular foots
-  function foot(pt,a,b){
+  const foot = function(pt,a,b){
     const dx=b.x-a.x, dy=b.y-a.y, t=((pt.x-a.x)*dx+(pt.y-a.y)*dy)/(dx*dx+dy*dy);
     return {x:a.x+t*dx, y:a.y+t*dy};
   }
   const fA=foot(P,O,A), fB=foot(P,O,B);
 
   // Dashed perpendiculars
-  function dd(a,b){
+  const dd = function(a,b){
     ctx.beginPath(); ctx.setLineDash([6,4]); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y);
     ctx.strokeStyle=CLR.red; ctx.lineWidth=2; ctx.stroke(); ctx.setLineDash([]);
   }
   dd(P,fA); dd(P,fB);
 
   // Right angle marks
-  function rt(v,p1,p2){
+  const rt = function(v,p1,p2){
     const a1=Math.atan2(p1.y-v.y,p1.x-v.x), a2=Math.atan2(p2.y-v.y,p2.x-v.x), s=15;
     const x1=v.x+s*Math.cos(a1), y1=v.y+s*Math.sin(a1);
     const x2=v.x+s*Math.cos(a2), y2=v.y+s*Math.sin(a2);
@@ -244,7 +244,7 @@ function drawBisector(ctx, w, h, p, frame) {
   rt(fA,O,P); rt(fB,O,P);
 
   // Equal marks
-  function em(a,b,n){
+  const em = function(a,b,n){
     const an=Math.atan2(b.y-a.y,b.x-a.x)+Math.PI/2, mx=(a.x+b.x)/2, my=(a.y+b.y)/2;
     for(let i=0;i<n;i++){
       const o=6*(i-(n-1)/2), x=mx+o*Math.cos(an+Math.PI/2), y=my+o*Math.sin(an+Math.PI/2);
@@ -255,7 +255,7 @@ function drawBisector(ctx, w, h, p, frame) {
   em(P,fA,2); em(P,fB,2);
 
   // Angle marks
-  function ang(v,p1,p2,c,r,lb){
+  const ang = function(v,p1,p2,c,r,lb){
     const a1=Math.atan2(p1.y-v.y,p1.x-v.x), a2=Math.atan2(p2.y-v.y,p2.x-v.x);
     ctx.beginPath(); ctx.arc(v.x,v.y,r,a1,a2,false);
     ctx.strokeStyle=c; ctx.lineWidth=2; ctx.stroke();
@@ -299,7 +299,7 @@ function drawShortestPath(ctx, w, h, p, frame) {
   ctx.strokeStyle=CLR.red; ctx.lineWidth=2.5; ctx.stroke();
 
   // Dashed A-B' and B-B'
-  function dd(a,b){
+  const dd = function(a,b){
     ctx.beginPath(); ctx.setLineDash([6,4]); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y);
     ctx.strokeStyle=CLR.gry; ctx.lineWidth=1.5; ctx.stroke(); ctx.setLineDash([]);
   }
@@ -352,7 +352,7 @@ function drawDart(ctx, w, h, p, frame) {
   ctx.strokeStyle=CLR.gry; ctx.lineWidth=1.5; ctx.stroke(); ctx.setLineDash([]);
 
   // Angle arcs
-  function ang(v,p1,p2,c,r,lb){
+  const ang = function(v,p1,p2,c,r,lb){
     const a1=Math.atan2(p1.y-v.y,p1.x-v.x), a2=Math.atan2(p2.y-v.y,p2.x-v.x);
     ctx.beginPath(); ctx.moveTo(v.x,v.y); ctx.arc(v.x,v.y,r,a1,a2,false); ctx.lineTo(v.x,v.y);
     ctx.fillStyle=clr(c,0.2); ctx.fill();
@@ -394,14 +394,14 @@ function drawFigure8(ctx, w, h, p, frame) {
   const D={x:cx-L*Math.cos(ang), y:cy+L*Math.sin(ang)};
 
   // Lines
-  function seg(a,b,c,lw){
+  const seg = function(a,b,c,lw){
     ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y);
     ctx.strokeStyle=c; ctx.lineWidth=lw; ctx.stroke();
   }
   seg(A,B,CLR.pri,2); seg(C,D,CLR.pri,2);
 
   // Angle arcs at O
-  function ang(v,p1,p2,c,r,lb){
+  const angArc = function(v,p1,p2,c,r,lb){
     const a1=Math.atan2(p1.y-v.y,p1.x-v.x), a2=Math.atan2(p2.y-v.y,p2.x-v.x);
     ctx.beginPath(); ctx.moveTo(v.x,v.y); ctx.arc(v.x,v.y,r,a1,a2,false); ctx.lineTo(v.x,v.y);
     ctx.fillStyle=clr(c,0.25); ctx.fill();
@@ -411,10 +411,10 @@ function drawFigure8(ctx, w, h, p, frame) {
     ctx.fillStyle=c; ctx.font='bold 14px sans-serif'; ctx.textAlign='center';
     ctx.fillText(lb, v.x+(r+16)*Math.cos(ma), v.y+(r+16)*Math.sin(ma));
   }
-  ang(O,A,C,CLR.red,30,'∠1');
-  ang(O,C,B,CLR.red,30,'∠2');
-  ang(O,B,D,CLR.grn,30,'∠3');
-  ang(O,D,A,CLR.grn,30,'∠4');
+  angArc(O,A,C,CLR.red,30,'∠1');
+  angArc(O,C,B,CLR.red,30,'∠2');
+  angArc(O,B,D,CLR.grn,30,'∠3');
+  angArc(O,D,A,CLR.grn,30,'∠4');
 
   // Points
   [A,B,C,D,O].forEach(pt=>{
@@ -456,7 +456,7 @@ function drawHalfAngle(ctx, w, h, p, frame) {
   const L=sz*1.8;
 
   // Line intersection helper
-  function isect(p1,p2,p3,p4){
+  const isect = function(p1,p2,p3,p4){
     const d=(p1.x-p2.x)*(p3.y-p4.y)-(p1.y-p2.y)*(p3.x-p4.x);
     if(Math.abs(d)<1e-8)return{x:p1.x,y:p1.y};
     const t=((p1.x-p3.x)*(p3.y-p4.y)-(p1.y-p3.y)*(p3.x-p4.x))/d;
@@ -469,7 +469,7 @@ function drawHalfAngle(ctx, w, h, p, frame) {
   const F=isect(A,R2,D,C);
 
   // Rays and EF
-  function seg(a,b,c,lw){
+  const seg = function(a,b,c,lw){
     ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y);
     ctx.strokeStyle=c; ctx.lineWidth=lw; ctx.stroke();
   }
