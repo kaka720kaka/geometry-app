@@ -80,7 +80,7 @@ body {
 canvas {
   display: block;
   width: 100%;
-  height: auto;
+  aspect-ratio: 600 / 400;
   border-radius: var(--radius);
   border: 1px solid var(--border);
   background: #fafbfc;
