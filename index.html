@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>初二几何模型 - 动态演示</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app">
+    <!-- Header -->
+    <header class="header">
+      <h1 class="title">初二几何模型动态演示</h1>
+    </header>
+
+    <!-- Model Selector -->
+    <nav class="model-nav" id="modelNav"></nav>
+
+    <!-- Canvas Area -->
+    <div class="canvas-wrap">
+      <canvas id="canvas"></canvas>
+    </div>
+
+    <!-- Controls -->
+    <div class="controls" id="controls"></div>
+
+    <!-- Info Panel -->
+    <div class="info-panel" id="infoPanel">
+      <div class="info-name" id="infoName"></div>
+      <div class="info-theorem" id="infoTheorem"></div>
+    </div>
+  </div>
+
+  <script src="draw-utils.js"></script>
+  <script src="models.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
