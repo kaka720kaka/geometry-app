@@ -228,6 +228,22 @@ function draw() {
     console.error(e);
   }
 
+  // TEST: big red circle to verify canvas drawing works
+  ctx.beginPath();
+  ctx.arc(W/2, H/2, 30, 0, Math.PI * 2);
+  ctx.fillStyle = '#dc2626';
+  ctx.fill();
+
+  // TEST: draw a simple triangle directly
+  ctx.beginPath();
+  ctx.moveTo(100, 200);
+  ctx.lineTo(300, 100);
+  ctx.lineTo(500, 200);
+  ctx.closePath();
+  ctx.strokeStyle = '#16a34a';
+  ctx.lineWidth = 4;
+  ctx.stroke();
+
   // DEBUG: visible purple border on top of everything
   ctx.strokeStyle = '#7c3aed';
   ctx.lineWidth = 3;
